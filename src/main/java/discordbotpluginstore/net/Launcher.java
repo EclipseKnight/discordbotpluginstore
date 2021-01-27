@@ -36,13 +36,12 @@ public class Launcher extends JavaPlugin {
 		pool = Executors.newCachedThreadPool();
 		
 		discordBot = new DiscordBot();
-		
-		DiscordUtils.sendRelayMessage(DiscordUtils.format(MessageRelay.minecraftPrefix, "bold") + " STORE OPENED <:green_circle:690600732113502239>");
+		DiscordUtils.sendRelayMessage(String.format("**%s** STORE OPENED <:green_circle:690600732113502239>", MessageRelay.minecraftPrefix));
 	}
 	
 	@Override
 	public void onDisable() {
-		DiscordUtils.sendRelayMessage(DiscordUtils.format(MessageRelay.minecraftPrefix, "bold") + " STORE CLOSED <:red_circle:690600907666358314>");
+		DiscordUtils.sendRelayMessage(String.format("**%s** STORE CLOSED <:red_circle:690600907666358314>", MessageRelay.minecraftPrefix));
 
 		try {
 			Logger.log(Level.WARN, "Awaiting pool task termination...");
