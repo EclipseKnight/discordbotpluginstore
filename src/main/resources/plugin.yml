@@ -1,0 +1,12 @@
+name: MinecraftDiscordBotPluginStore
+main: discordbotpluginstore.net.Launcher
+version: 1.0
+api-version: 1.16
+softdepend: [MinecraftDiscordBotPlugin]
+commands:
+     bank:
+       description: bank commands
+       usage: /bank [check, give]
+     timeplayed:
+       description: check how long you've played on the server
+       usage: /timeplayed [check, top]
