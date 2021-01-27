@@ -75,16 +75,4 @@ public class DiscordUtils {
 		return null;
 		
 	}
-	
-	public static String format(String message, String form) {
-
-		if ("bold".equals(form)) {
-			return "**" + message + "**";
-		}
-
-		if ("italics".equals(form)) {
-			return "*" + message + "*";
-		}
-		return message;
-	}
 }
