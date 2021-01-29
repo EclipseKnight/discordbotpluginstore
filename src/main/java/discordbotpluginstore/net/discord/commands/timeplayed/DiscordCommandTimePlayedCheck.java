@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
 import discordbotpluginstore.net.database.MCPlayer;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 import discordbotpluginstore.net.minecraft.commands.store.StoreUtils;
 
 public class DiscordCommandTimePlayedCheck extends Command {
@@ -19,11 +19,11 @@ public class DiscordCommandTimePlayedCheck extends Command {
 	protected void execute(CommandEvent event) {	
 		
 		if (!event.getArgs().isBlank()) {
-			String discordId = CommandUtilities.getIdFromMention(event.getArgs().trim());
+			String discordId = CommandUtils.getIdFromMention(event.getArgs().trim());
 			
 			// If player attempts to check another user. 
-			if (CommandUtilities.getUserWithDiscordId(discordId) != null) {
-				MCPlayer p = CommandUtilities.getUserWithDiscordId(discordId);
+			if (CommandUtils.getUserWithDiscordId(discordId) != null) {
+				MCPlayer p = CommandUtils.getUserWithDiscordId(discordId);
 				
 				String msg = String.format("""
 						```yaml
@@ -42,7 +42,7 @@ public class DiscordCommandTimePlayedCheck extends Command {
 		}
 		
 		// if attempt fails or user wants to check self.
-		MCPlayer p = CommandUtilities.getUserWithDiscordId(event.getAuthor().getId());
+		MCPlayer p = CommandUtils.getUserWithDiscordId(event.getAuthor().getId());
 		String msg = String.format("""
 				```yaml
 				%s: %s

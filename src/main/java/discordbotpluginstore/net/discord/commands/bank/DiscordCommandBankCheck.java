@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
 import discordbotpluginstore.net.database.MCPlayer;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 
 public class DiscordCommandBankCheck extends Command {
 	
@@ -14,7 +14,7 @@ public class DiscordCommandBankCheck extends Command {
 	
 	@Override
 	protected void execute(CommandEvent event) {
-		MCPlayer p = CommandUtilities.getUserWithDiscordId(event.getMember().getId());
+		MCPlayer p = CommandUtils.getUserWithDiscordId(event.getMember().getId());
 		
 		String msg = String.format("""
 				```yaml

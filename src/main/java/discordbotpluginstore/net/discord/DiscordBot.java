@@ -24,6 +24,7 @@ import discordbotpluginstore.net.discord.commands.DiscordCommandHelp;
 import discordbotpluginstore.net.discord.commands.bank.DiscordCommandBank;
 import discordbotpluginstore.net.discord.commands.config.DiscordCommandConfiguration;
 import discordbotpluginstore.net.discord.commands.general.DiscordCommandBotTest;
+import discordbotpluginstore.net.discord.commands.general.DiscordCommandWhoIs;
 import discordbotpluginstore.net.discord.commands.restart.DiscordCommandRestart;
 import discordbotpluginstore.net.discord.commands.store.DiscordCommandLink;
 import discordbotpluginstore.net.discord.commands.store.DiscordCommandReceipt;
@@ -81,7 +82,7 @@ public class DiscordBot {
 		}
 		
 		try {
-			jda = JDABuilder.createLight(configuration.getApi().get("discord_client_token"), intents).build().awaitReady();
+			jda = JDABuilder.create(configuration.getApi().get("discord_client_token"), intents).build().awaitReady();
 		} catch (LoginException | InterruptedException e) {
 			System.out.println("Discord bot failed to initialize: " + e.toString());
 			return;
@@ -125,7 +126,8 @@ public class DiscordBot {
 				new DiscordCommandLink(),
 				new DiscordCommandTimePlayed(),
 				new DiscordCommandBank(),
-				new DiscordCommandReceipt()
+				new DiscordCommandReceipt(),
+				new DiscordCommandWhoIs()
 				);
 		
 		// built command client

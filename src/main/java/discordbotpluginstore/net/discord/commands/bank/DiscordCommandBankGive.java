@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 
 import discordbotpluginstore.net.database.MCPlayer;
 import discordbotpluginstore.net.discord.DiscordUtils;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 import discordbotpluginstore.net.minecraft.MinecraftUtils;
 import discordbotpluginstore.net.minecraft.commands.store.StoreUtils;
 import net.md_5.bungee.api.ChatColor;
@@ -34,7 +34,7 @@ public class DiscordCommandBankGive extends Command {
 		int diamondCoins = Integer.valueOf(args[3]);
 		
 		// Get player and check if they can afford to send set amount.
-		MCPlayer p1 = CommandUtilities.getUserWithDiscordId(event.getMember().getId());
+		MCPlayer p1 = CommandUtils.getUserWithDiscordId(event.getMember().getId());
 		if ((p1.getIronCoins() < ironCoins) || (p1.getGoldCoins() < goldCoins) || (p1.getDiamondCoins() < diamondCoins)) {
 			DiscordUtils.sendTimedMessaged(event, "You do not have enough coins to give that amount. ", 5000, false);
 			return;
@@ -45,11 +45,11 @@ public class DiscordCommandBankGive extends Command {
 			return;
 		}
 		
-		String discordId = CommandUtilities.getIdFromMention(args[0]);
+		String discordId = CommandUtils.getIdFromMention(args[0]);
 		
 		// discord @
-		if (CommandUtilities.getUserWithDiscordId(discordId) != null) {
-			MCPlayer p2 = CommandUtilities.getUserWithDiscordId(discordId);
+		if (CommandUtils.getUserWithDiscordId(discordId) != null) {
+			MCPlayer p2 = CommandUtils.getUserWithDiscordId(discordId);
 			
 			StoreUtils.pay(ironCoins, goldCoins, diamondCoins, p2.getUuid());
 			
@@ -79,8 +79,8 @@ public class DiscordCommandBankGive extends Command {
 		}
 		
 		// Minecraft username
-		if (CommandUtilities.getUserWithMinecraftName(args[0]) != null) {
-			MCPlayer p2 = CommandUtilities.getUserWithMinecraftName(args[0]);
+		if (CommandUtils.getUserWithMinecraftName(args[0]) != null) {
+			MCPlayer p2 = CommandUtils.getUserWithMinecraftName(args[0]);
 			
 			StoreUtils.pay(ironCoins, goldCoins, diamondCoins, p2.getUuid());
 			StoreUtils.charge(ironCoins, goldCoins, diamondCoins, p1.getUuid());

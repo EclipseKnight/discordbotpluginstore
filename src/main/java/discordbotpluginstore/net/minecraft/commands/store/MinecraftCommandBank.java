@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
 import discordbotpluginstore.net.discord.DiscordUtils;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 import discordbotpluginstore.net.logger.Logger;
 import discordbotpluginstore.net.logger.Logger.Level;
 import discordbotpluginstore.net.minecraft.MinecraftUtils;
@@ -29,7 +29,7 @@ public class MinecraftCommandBank implements CommandExecutor {
 		Player player = (Player) sender;
 		
 		// Check if player can use the command.
-		if (!CommandUtilities.fullUsageCheck(player.getUniqueId().toString(), "discord_command_bank")) {
+		if (!CommandUtils.fullUsageCheck(player.getUniqueId().toString(), "discord_command_bank")) {
 			Logger.log(Level.INFO, "Cannot use command.");
 			return true;
 		}
@@ -42,7 +42,7 @@ public class MinecraftCommandBank implements CommandExecutor {
 		
 		// Checks if the command is the "check" cmd.
 		if ("check".equals(args[0])) {
-			MCPlayer p = CommandUtilities.getUserWithMinecraftName(player.getName());
+			MCPlayer p = CommandUtils.getUserWithMinecraftName(player.getName());
 			
 			String msg = String.format("&2Bank: | &7%s Iron Coins&2 | &6%s Gold Coins&2 | &b%s Diamond Coins&2 |",
 					p.getIronCoins(), p.getGoldCoins(), p.getDiamondCoins());
@@ -65,7 +65,7 @@ public class MinecraftCommandBank implements CommandExecutor {
 			int diamondCoins = Integer.valueOf(args[4]);
 			
 			
-			MCPlayer p1 = CommandUtilities.getUserWithMinecraftName(player.getName());
+			MCPlayer p1 = CommandUtils.getUserWithMinecraftName(player.getName());
 			if ((p1.getIronCoins() < ironCoins) || (p1.getGoldCoins() < goldCoins) || (p1.getDiamondCoins() < diamondCoins)) {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cYou do not have enough coins to give that amount. "));
 				return true;
@@ -76,8 +76,8 @@ public class MinecraftCommandBank implements CommandExecutor {
 				return true;
 			}
 			
-			if (CommandUtilities.getUserWithMinecraftName(args[1]) != null) {
-				MCPlayer p2 = CommandUtilities.getUserWithMinecraftName(args[1]);
+			if (CommandUtils.getUserWithMinecraftName(args[1]) != null) {
+				MCPlayer p2 = CommandUtils.getUserWithMinecraftName(args[1]);
 				
 				StoreUtils.pay(ironCoins, goldCoins, diamondCoins, p2.getUuid());
 				
@@ -121,7 +121,7 @@ public class MinecraftCommandBank implements CommandExecutor {
 		// eat cmd
 		if ("eat".equals(args[0])) {
 			
-			MCPlayer p = CommandUtilities.getUserWithMinecraftId(player.getUniqueId().toString());
+			MCPlayer p = CommandUtils.getUserWithMinecraftId(player.getUniqueId().toString());
 			
 			if (p.getIronCoins() <= 0) {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8You look in your bank and find nothing but dust and a lonesome cobweb in the corner... "

@@ -6,6 +6,7 @@ import discordbotpluginstore.net.Launcher;
 import discordbotpluginstore.net.logger.Logger;
 import discordbotpluginstore.net.logger.Logger.Level;
 import io.jsondb.JsonDBTemplate;
+import io.jsondb.events.CollectionFileChangeListener;
 
 public class JsonDB {
 
@@ -23,5 +24,26 @@ public class JsonDB {
 		if (!database.collectionExists(MCPlayer.class)) {
 			database.createCollection(MCPlayer.class);
 		}
+		
+		database.addCollectionFileChangeListener(new CollectionFileChangeListener() {
+			
+			@Override
+			public void collectionFileModified(String collectionName) {
+				database.reloadCollection(collectionName);
+				Logger.log(Level.WARN, "Collection File Modified: " + collectionName +"\nReloaded Collection.");
+			}
+			
+			@Override
+			public void collectionFileDeleted(String collectionName) {
+				database.reLoadDB();
+				Logger.log(Level.WARN, "Collection File Deleted: " + collectionName +"\nReloaded Database.");
+			}
+			
+			@Override
+			public void collectionFileAdded(String collectionName) {
+				database.reLoadDB();
+				Logger.log(Level.WARN, "Collection File Added: " + collectionName +"\nReloaded Database.");
+			}
+		});
 	}
 }

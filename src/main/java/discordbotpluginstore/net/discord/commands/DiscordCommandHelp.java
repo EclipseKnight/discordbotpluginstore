@@ -35,11 +35,11 @@ public class DiscordCommandHelp implements Consumer<CommandEvent> {
 	private boolean canUse(CommandEvent event, String feature) {
 		boolean result = true;
 		
-		if (!CommandUtilities.isFeatureEnabled(feature)) {
+		if (!CommandUtils.isFeatureEnabled(feature)) {
 			result = false;
 		}
 		
-		if (!CommandUtilities.canUseCommand(event, feature)) {
+		if (!CommandUtils.canUseCommand(event, feature)) {
 			result = false;
 		}
 		

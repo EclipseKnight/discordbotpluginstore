@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 
 public class DiscordCommandBankEat extends Command {
 
@@ -17,7 +17,7 @@ public class DiscordCommandBankEat extends Command {
 	
 	@Override
 	protected void execute(CommandEvent event) {		
-		MCPlayer p = CommandUtilities.getUserWithDiscordId(event.getMember().getId());
+		MCPlayer p = CommandUtils.getUserWithDiscordId(event.getMember().getId());
 		
 		if (p.getIronCoins() <= 0) {
 			event.reply("You look in your bank and find nothing but dust and a lonesome cobweb in the corner... "

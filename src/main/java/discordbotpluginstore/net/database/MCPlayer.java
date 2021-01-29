@@ -11,6 +11,7 @@ public class MCPlayer {
 	
 	private String minecraftName;
 	private String discordId;
+	private String discordEffName;
 	
 	private int ironCoins;
 	private int goldCoins;
@@ -35,7 +36,7 @@ public class MCPlayer {
 		return minecraftName;
 	}
 	
-	public void setMinecraftName(String minecraftName) {
+	public void setMinecraftName(String minecraftName) {	
 		this.minecraftName = minecraftName;
 	}
 	
@@ -45,6 +46,15 @@ public class MCPlayer {
 	
 	public void setDiscordId(String discordId) {
 		this.discordId = discordId;
+	}
+	
+	public String getDiscordEffName() {
+		return discordEffName;
+	}
+	
+	public void setDiscordEffName(String discordEffName) {
+		this.discordEffName = discordEffName;
+		
 	}
 	
 	public int getIronCoins() {

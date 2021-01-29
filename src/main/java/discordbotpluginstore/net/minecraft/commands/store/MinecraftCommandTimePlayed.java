@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 import discordbotpluginstore.net.logger.Logger;
 import discordbotpluginstore.net.logger.Logger.Level;
 import net.md_5.bungee.api.ChatColor;
@@ -26,7 +26,7 @@ public class MinecraftCommandTimePlayed implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		if (!CommandUtilities.fullUsageCheck(player.getUniqueId().toString(), "discord_command_time_played")) {
+		if (!CommandUtils.fullUsageCheck(player.getUniqueId().toString(), "discord_command_time_played")) {
 			Logger.log(Level.INFO, "Cannot use command.");
 			return true;
 		}
@@ -40,8 +40,8 @@ public class MinecraftCommandTimePlayed implements CommandExecutor {
 		if ("check".equals(args[0])) {
 			
 			// check target timeplayed
-			if (args.length > 1 && CommandUtilities.getUserWithMinecraftName(args[1]) != null) {
-				MCPlayer p = CommandUtilities.getUserWithMinecraftName(args[1]);
+			if (args.length > 1 && CommandUtils.getUserWithMinecraftName(args[1]) != null) {
+				MCPlayer p = CommandUtils.getUserWithMinecraftName(args[1]);
 				String msg = String.format("&6%s: &e%s&r \n&6JoinDate: &e%s&r \n&6LastPlayed: &e%s&r", 
 						p.getMinecraftName(),
 						StoreUtils.getTimedPlayedDate(p.getTimePlayed()),
@@ -53,7 +53,7 @@ public class MinecraftCommandTimePlayed implements CommandExecutor {
 			}
 			
 			// check self timeplayed
-			MCPlayer p = CommandUtilities.getUserWithMinecraftId(player.getUniqueId().toString());
+			MCPlayer p = CommandUtils.getUserWithMinecraftId(player.getUniqueId().toString());
 			String msg = String.format("&6%s: &e%s&r \n&6JoinDate: &e%s&r \n&6LastPlayed: &e%s&r", 
 					p.getMinecraftName(),
 					StoreUtils.getTimedPlayedDate(p.getTimePlayed()),

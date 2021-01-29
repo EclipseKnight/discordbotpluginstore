@@ -12,33 +12,33 @@ import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
 import discordbotpluginstore.net.discord.DiscordBot;
 import discordbotpluginstore.net.discord.DiscordUtils;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
+import discordbotpluginstore.net.logger.Logger;
+import discordbotpluginstore.net.logger.Logger.Level;
 import net.dv8tion.jda.api.entities.Role;
 import net.md_5.bungee.api.ChatColor;
 
-public class CommandUtilities {
+public class CommandUtils {
 	
 	public static boolean fullUsageCheck(CommandEvent event, String feature) {
 		boolean result = true;
 		String reply = "";
 		
-		if (!CommandUtilities.isFeatureEnabled(feature)) {
+		if (!CommandUtils.isFeatureEnabled(feature)) {
 			reply += "Command is disabled. ";
 			result = false;
 		}
 		
-		if (!CommandUtilities.correctChannel(event, feature)) {
+		if (!CommandUtils.correctChannel(event, feature)) {
 			reply += "Command is disabled in this channel. ";
 			result = false;
 		}
 		
-		if (!CommandUtilities.canUseCommand(event, feature)) {
+		if (!CommandUtils.canUseCommand(event, feature)) {
 			reply += "Command is disabled for your role.";
 			result = false;
 		}
 		
-		if (!CommandUtilities.isFeatureLinked(event, feature)) {
+		if (!CommandUtils.isFeatureLinked(event, feature)) {
 			reply += "Command requires you to be linked.";
 			result = false;
 		}
@@ -54,12 +54,12 @@ public class CommandUtilities {
 		boolean result = true;
 		String reply = "";
 		
-		if (!CommandUtilities.isFeatureEnabled(feature)) {
+		if (!CommandUtils.isFeatureEnabled(feature)) {
 			reply += "Command is disabled. ";
 			result = false;
 		}
 		
-		if (!CommandUtilities.isFeatureLinked(uuid, feature)) {
+		if (!CommandUtils.isFeatureLinked(uuid, feature)) {
 			reply += "Command requires you to be linked.";
 			result = false;
 		}
@@ -145,6 +145,10 @@ public class CommandUtilities {
 	}
 	
 	public static MCPlayer getUserWithDiscordId(String id) {
+		if (id == null) {
+			return null;
+		}
+		
 		String jxQuery = String.format("/.[discordId='%s']", id);
 		List<MCPlayer> players = JsonDB.database.find(jxQuery, MCPlayer.class);
 		
@@ -155,19 +159,13 @@ public class CommandUtilities {
 		return null;
 	}
 	
-	public static MCPlayer getUserWithDiscordTag(String name) {
-		Guild g = DiscordBot.jda.getGuildById(DiscordBot.configuration.getGuildId());
-		
-		Member m;
-		
-		try {
-			m = g.getMemberByTag(name);
-		} catch(IllegalArgumentException e) {
+	public static MCPlayer getUserWithDiscordName(String effname) {
+		if (effname == null) {
 			return null;
 		}
 		
-		
-		String jxQuery = String.format("/.[discordId='%s']", m.getId());
+		effname = effname.toLowerCase();
+		String jxQuery = String.format("/.[translate(discordEffName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='%s']", effname);
 		List<MCPlayer> players = JsonDB.database.find(jxQuery, MCPlayer.class);
 		
 		if (!players.isEmpty() && players != null) {
@@ -178,7 +176,12 @@ public class CommandUtilities {
 	}
 	
 	public static MCPlayer getUserWithMinecraftName(String mcname) {
-		String jxQuery = String.format("/.[minecraftName='%s']", mcname);
+		if (mcname == null) {
+			return null;
+		}
+		
+		mcname = mcname.toLowerCase();
+		String jxQuery = String.format("/.[translate(minecraftName, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='%s']", mcname);
 		List<MCPlayer> players = JsonDB.database.find(jxQuery, MCPlayer.class);
 		
 		if (!players.isEmpty() && players != null) {
@@ -200,5 +203,22 @@ public class CommandUtilities {
 	
 	public static String getIdFromMention(String mention) {
 		return mention.replaceAll("[\\\\<>@#&!]", "");
+	}
+	
+	public static boolean isSnowflake(String input) {
+		if (input.isEmpty()) {
+			return false;
+		}
+		
+        try {
+            if (!input.startsWith("-")) // if not negative -> parse unsigned
+                Long.parseUnsignedLong(input);
+            else // if negative -> parse normal
+                Long.parseLong(input);
+        } catch (NumberFormatException ex) {
+        	Logger.log(Level.WARN, "The specified ID is not a valid snowflake (%s). Expecting a valid long value!" + " ID:" + input);
+            return false;
+        }
+        return true;
 	}
 }

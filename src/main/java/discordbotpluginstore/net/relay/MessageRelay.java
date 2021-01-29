@@ -11,10 +11,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import discordbotpluginstore.net.Launcher;
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
+import discordbotpluginstore.net.discord.DiscordBot;
 import discordbotpluginstore.net.logger.Logger;
 import discordbotpluginstore.net.logger.Logger.Level;
 import discordbotpluginstore.net.minecraft.commands.store.StoreUtils;
 import discordbotpluginstore.net.tasks.CurrencyEarnTask;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.md_5.bungee.api.ChatColor;
 
@@ -38,6 +40,7 @@ public class MessageRelay extends ListenerAdapter implements Listener {
 			p.setUuid(e.getPlayer().getUniqueId().toString());
 			p.setMinecraftName(e.getPlayer().getName());
 			p.setDiscordId(null);
+			p.setDiscordEffName(null);
 			p.setJoinDate(StoreUtils.getCurrentDateTime());
 			p.setLastPlayedDate(StoreUtils.getCurrentDateTime());
 			p.setTimePlayed(0);
@@ -54,10 +57,15 @@ public class MessageRelay extends ListenerAdapter implements Listener {
 		
 		// Update lastlogin date of player.
 		p.setLastPlayedDate(StoreUtils.getCurrentDateTime());
-		JsonDB.database.upsert(p);
+		// Updates name in case of change.
+		p.setMinecraftName(e.getPlayer().getName());
 		
 		// Check if discord and mincraft accounts are linked.
 		if (p.getDiscordId() != null) {
+			
+			Member m = DiscordBot.jda.getGuildById(DiscordBot.configuration.getGuildId()).retrieveMemberById(p.getDiscordId()).complete();
+			p.setDiscordEffName(m.getEffectiveName());
+			
 			Logger.log(Level.INFO, "Player linked.");
 			String message = "&2Discord Account Linked. Earning coins every 5 minutes.";
 			e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
@@ -81,11 +89,19 @@ public class MessageRelay extends ListenerAdapter implements Listener {
 				e1.printStackTrace();
 			}
 		}
+		
+		JsonDB.database.upsert(p);
 	}
 	
 	@EventHandler
 	public void onPlayerLogout(PlayerQuitEvent e) {
 		MCPlayer p = JsonDB.database.findById(e.getPlayer().getUniqueId().toString(), MCPlayer.class);
 		p.setLastPlayedDate(StoreUtils.getCurrentDateTime());
+		
+		Member m = DiscordBot.jda.getGuildById(DiscordBot.configuration.getGuildId()).retrieveMemberById(p.getDiscordId()).complete();
+		if (p != null)
+			p.setDiscordEffName(m.getEffectiveName());
+		
+		JsonDB.database.upsert(p);
 	}
 }

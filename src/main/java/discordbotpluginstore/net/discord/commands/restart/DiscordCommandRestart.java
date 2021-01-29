@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
 import discordbotpluginstore.net.discord.DiscordBot;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 
 public class DiscordCommandRestart extends Command{
 
@@ -18,7 +18,7 @@ public class DiscordCommandRestart extends Command{
 	@Override
 	protected void execute(CommandEvent event) {
 		
-		if (!CommandUtilities.fullUsageCheck(event, feature)) {
+		if (!CommandUtils.fullUsageCheck(event, feature)) {
 			return;
 		}
 		

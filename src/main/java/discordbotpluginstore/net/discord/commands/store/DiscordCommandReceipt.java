@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
 import discordbotpluginstore.net.discord.DiscordUtils;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 
 public class DiscordCommandReceipt extends Command {
 
@@ -22,7 +22,7 @@ public class DiscordCommandReceipt extends Command {
 		}
 		
 		if ("true".equals(event.getArgs().trim())) {
-			MCPlayer p = CommandUtilities.getUserWithDiscordId(event.getMember().getId());
+			MCPlayer p = CommandUtils.getUserWithDiscordId(event.getMember().getId());
 			
 			p.setSendReceipts(true);
 			JsonDB.database.upsert(p);
@@ -31,7 +31,7 @@ public class DiscordCommandReceipt extends Command {
 		}
 		
 		if ("false".equals(event.getArgs().trim())) {
-			MCPlayer p = CommandUtilities.getUserWithDiscordId(event.getMember().getId());
+			MCPlayer p = CommandUtils.getUserWithDiscordId(event.getMember().getId());
 			
 			p.setSendReceipts(false);
 			JsonDB.database.upsert(p);

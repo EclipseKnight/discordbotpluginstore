@@ -11,7 +11,7 @@ import discordbotpluginstore.net.Launcher;
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
 import discordbotpluginstore.net.discord.DiscordBot;
-import discordbotpluginstore.net.discord.commands.CommandUtilities;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 import discordbotpluginstore.net.logger.Logger;
 import discordbotpluginstore.net.logger.Logger.Level;
 import net.dv8tion.jda.api.entities.Role;
@@ -27,7 +27,7 @@ public class DiscordCommandLink extends Command {
 	
 	@Override
 	protected void execute(CommandEvent event) {
-		if (!CommandUtilities.fullUsageCheck(event, feature)) {
+		if (!CommandUtils.fullUsageCheck(event, feature)) {
 			return;
 		}
 		
@@ -48,7 +48,7 @@ public class DiscordCommandLink extends Command {
 			return;
 		}
 		
-		if (CommandUtilities.getUserWithMinecraftName(args[0]) != null) {
+		if (CommandUtils.getUserWithMinecraftName(args[0]) != null) {
 			Logger.log(Level.INFO, "User found.");
 			MCPlayer p = JsonDB.database.find(jxQuery, MCPlayer.class).get(0);
 			p.setDiscordId(event.getMember().getId());
