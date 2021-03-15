@@ -1,5 +1,7 @@
 package discordbotpluginstore.net.discord.commands.general;
 
+import java.awt.Color;
+
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
@@ -30,7 +32,7 @@ public class DiscordCommandWhoIs extends Command {
 		
 		MCPlayer p = null;
 			
-		if (CommandUtils.isSnowflake(discordId) && CommandUtils.getUserWithDiscordId(discordId) != null) {
+		if (CommandUtils.isValidSnowflake(discordId) && CommandUtils.getUserWithDiscordId(discordId) != null) {
 			p = CommandUtils.getUserWithDiscordId(discordId);
 		}
 		
@@ -44,8 +46,23 @@ public class DiscordCommandWhoIs extends Command {
 		}
 		
 		if (p.getDiscordId() == null) {
-			DiscordUtils.sendTimedMessaged(event, "Player info not accessible. Player is either not linked or left the server.", 5000, false);
+			DiscordUtils.sendMessage(event, "Player is not linked. Displaying available data...", false);
+//			DiscordUtils.sendTimedMessaged(event, "Player info not accessible. Player is either not linked or left the server.", 5000, false);
 			//TODO in event of a player leaving provide legacy data. 
+//			return;
+			
+			//Even though user is not linked, provide available data on the user.
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setAuthor("MC:" + p.getMinecraftName() + "]");
+			eb.setColor(Color.gray);
+			eb.addField("<:timer:804215981328957441> Time Stats. . .", " ", false);
+			eb.addField("Time Played:", StoreUtils.getTimedPlayedDate(p.getTimePlayed()), true);
+			eb.addField("Join Date:", p.getJoinDate() + " UTC", true);
+			eb.addField("Last Played:", p.getLastPlayedDate() + " UTC", true);
+			eb.addField("<a:peepoMoneyRain:804218668933709854> Bank Wealth. . . JK, this user can't earn coins.", " ", false);
+			MessageEmbed embed = eb.build();
+			
+			event.reply(embed);
 			return;
 		}
 		

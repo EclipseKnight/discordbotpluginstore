@@ -205,7 +205,7 @@ public class CommandUtils {
 		return mention.replaceAll("[\\\\<>@#&!]", "");
 	}
 	
-	public static boolean isSnowflake(String input) {
+	public static boolean isValidSnowflake(String input) {
 		if (input.isEmpty()) {
 			return false;
 		}

@@ -12,6 +12,7 @@ import discordbotpluginstore.net.Launcher;
 import discordbotpluginstore.net.database.JsonDB;
 import discordbotpluginstore.net.database.MCPlayer;
 import discordbotpluginstore.net.discord.DiscordBot;
+import discordbotpluginstore.net.discord.commands.CommandUtils;
 import discordbotpluginstore.net.logger.Logger;
 import discordbotpluginstore.net.logger.Logger.Level;
 import discordbotpluginstore.net.minecraft.commands.store.StoreUtils;
@@ -69,10 +70,10 @@ public class MessageRelay extends ListenerAdapter implements Listener {
 			Logger.log(Level.INFO, "Player linked.");
 			String message = "&2Discord Account Linked. Earning coins every 5 minutes.";
 			e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-			Launcher.pool.execute(new CurrencyEarnTask(p.getUuid()));
+			Launcher.pool.execute(new CurrencyEarnTask(p.getUuid(), true));
 			
 		} else {
-			
+			//Else, the user will not earn currency but timeplayed will still be tracked.
 			Logger.log(Level.INFO, "Player not linked.");
 			try {
 				URL invite = new URL("https://discord.gg/wEmD7hSZBf");
@@ -84,6 +85,7 @@ public class MessageRelay extends ListenerAdapter implements Listener {
 				
 				e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 				e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message2));
+				Launcher.pool.execute(new CurrencyEarnTask(p.getUuid(), false));
 				
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
@@ -95,12 +97,16 @@ public class MessageRelay extends ListenerAdapter implements Listener {
 	
 	@EventHandler
 	public void onPlayerLogout(PlayerQuitEvent e) {
-		MCPlayer p = JsonDB.database.findById(e.getPlayer().getUniqueId().toString(), MCPlayer.class);
+		MCPlayer p = CommandUtils.getUserWithMinecraftId(e.getPlayer().getUniqueId().toString());
 		p.setLastPlayedDate(StoreUtils.getCurrentDateTime());
 		
-		Member m = DiscordBot.jda.getGuildById(DiscordBot.configuration.getGuildId()).retrieveMemberById(p.getDiscordId()).complete();
-		if (p != null)
+		
+		if (p != null && p.getDiscordId() != null) {
+			Member m = DiscordBot.jda.getGuildById(DiscordBot.configuration.getGuildId()).retrieveMemberById(p.getDiscordId()).complete();
 			p.setDiscordEffName(m.getEffectiveName());
+		}
+			
+			
 		
 		JsonDB.database.upsert(p);
 	}

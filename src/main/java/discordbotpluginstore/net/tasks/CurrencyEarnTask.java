@@ -25,9 +25,11 @@ public class CurrencyEarnTask implements Runnable {
 	int numberOfPayouts = 0;
 	private String playerId;
 	private String playerName;
+	private boolean linked;
 	
-	public CurrencyEarnTask(String playerId) {
+	public CurrencyEarnTask(String playerId, boolean linked) {
 		this.playerId = playerId;
+		this.linked = linked;
 	}
 	
 	@Override
@@ -49,7 +51,8 @@ public class CurrencyEarnTask implements Runnable {
 			
 			unprocessedTime += passedTime;
 			
-			while (unprocessedTime >= earnRate) {
+			//if user isn't linked they will not earn currency but will have timeplayed tracked.
+			while (unprocessedTime >= earnRate && linked) {
 				unprocessedTime -= earnRate;
 				
 				// pay the player
